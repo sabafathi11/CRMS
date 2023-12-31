@@ -12,3 +12,7 @@ class Insurance(models):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # payment dates , installment payment , consultant contact ,
+    # shaghayegh is writing
+
+def shaghayegh():
+    pass
