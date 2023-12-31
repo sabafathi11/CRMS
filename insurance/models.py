@@ -14,5 +14,3 @@ class Insurance(models):
     # payment dates , installment payment , consultant contact ,
     # shaghayegh is writing
 
-def shaghayegh():
-    pass
