@@ -3,8 +3,8 @@ from django.db import models
 
 
 class Customer(AbstractUser):
-    # username
-    # password
+    # username inherits from AbstractUser
+    # password inherits from AbstractUser
     first_name = models.CharField(max_length=150, blank=False)
     last_name = models.CharField(max_length=150, blank=False)
     phone_number = models.CharField(max_length=11, blank=False)
