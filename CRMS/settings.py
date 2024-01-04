@@ -26,9 +26,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'insurance.apps.AppConfig',
-    'consultant.apps.AppConfig',
-    'customer.apps.AppConfig',
+    'insurance.apps.InsuranceConfig',
+    'consultant.apps.ConsultantConfig',
+    'customer.apps.CustomerConfig',
 
 ]
 
