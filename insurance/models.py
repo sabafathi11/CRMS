@@ -3,40 +3,40 @@ from customer.models import Customer
 from consultant.models import Consultant
 
 
-class Insurance(models):
+class Insurance(models.Model):
     name = models.CharField(max_length=150, blank=False)
-    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, related_name='Insurance')
-    consultant = models.ForeignKey(Consultant, on_delete=models.SET_NULL, related_name='consultant')
-#    forms = models.FileField(upload_to='Files/Insurance_Forms', max_length=50)
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, related_name='Insurance', null=True)
+    consultant = models.ForeignKey(Consultant, on_delete=models.SET_NULL, related_name='consultant', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    duration = models.IntegerField(max_length=15, choices=[1, 5, 10, 15, 30])  # years
+    duration = models.IntegerField(choices=((1, '1 year'),(5, '5 years'),(10, '10 years'),(15, '15 years'),(30, '30 years'),))
     cost = models.FloatField(max_length=150, blank=False)
+    payment_kind = models.CharField(max_length=15, choices=(('1','yearly'), ('2','monthly')))
 
-    payment_kind = models.CharField(max_length=15, choices=['yearly', 'monthly'])
-    if payment_kind == 'yearly':
-        payment_count = duration
-    else:
-        payment_count = duration * 12
-    payment_amount = cost / payment_count
+    @property
+    def payment_count(self):
+        if self.payment_kind == '1':
+            return self.duration
+        else:
+            return self.duration * 12
 
-    payment_dates = []
-    if payment_kind == 'yearly':
-        for i in range(payment_count):
-            payment_dates.append(created_at.replace(year=created_at.year + i))
-    else:
-        for i in range(payment_count):
-            payment_dates.append(created_at.replace(month=created_at.month + i))
-
-    payment_check = {i: False for i in payment_dates}
-
-    def pay(self, date: models.DateTimeField):
-        self.payment_check[date] = True
-
-    def next_payment(self):
-        for key in self.payment_check.keys():
-            if not self.payment_check[key]:
-                return key
-
+    @property
+    def payment_amount(self):
+        return self.cost / self.payment_count
 
     # payment dates , installment payment , consultant contact ,
+
+
+class Payment_dates(models.Model):
+    date = models.DateTimeField()
+    paid = models.BooleanField(default=False)
+    insurance = models.ForeignKey(Insurance, on_delete=models.SET_NULL, related_name='payment_dates', null=True)
+
+    def pay(self):
+        self.paid = True
+
+
+class Use_insurance(models.Model):
+    date = models.DateTimeField()
+    amount = models.FloatField(max_length=150, blank=False)
+    insurance = models.ForeignKey(Insurance, on_delete=models.SET_NULL, related_name='use_insurance', null=True)
