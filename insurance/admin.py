@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Insurance, Use_insurance, Payment_dates
+from .models import Insurance, Use_insurance, Payment_dates, Bank_card
 
 
 @admin.register(Insurance)
@@ -18,6 +18,11 @@ class Payment_dates_admin(admin.ModelAdmin):
 
 @admin.register(Use_insurance)
 class Use_insurance_admin(admin.ModelAdmin):
-    list_display = ('insurance', 'date', 'amount')
-    search_fields = ('insurance', 'date', 'amount')
-    ordering = ('date',)
+    list_display = ('insurance', 'request_date', 'paid_date', 'paid', 'documents', 'amount')
+    search_fields = ('insurance', 'request_date', 'paid_date', 'amount')
+    ordering = ('request_date',)
+
+@admin.register(Bank_card)
+class Bank_card_admin(admin.ModelAdmin):
+    list_display = ('card_number', 'shaba_number', 'bank_name', 'owner')
+    search_fields = ('card_number', 'shaba_number', 'bank_name', 'owner')
