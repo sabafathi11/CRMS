@@ -11,7 +11,11 @@
 <button><a href="{% url 'customer:logout_url' %}">Logout</a></button>
 {% if user.is_authenticated %}
     <p>you are logged in</p>
-    <button><a href="{% url 'customer:my_page' user.pk %}">My page</a></button>
+    {% if user.kind == '1' %}
+        <button><a href="{% url 'customer:my_page' user.pk %}">My page</a></button>
+    {% else %}
+        <button><a href="{% url 'consultant:my_page_cons' user.pk %}">My page</a></button>
+    {% endif %}
 {% endif %}
 </body>
 </html>
