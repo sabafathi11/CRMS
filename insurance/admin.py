@@ -4,7 +4,7 @@ from .models import Insurance, Use_insurance, Payment_dates, Bank_card
 
 @admin.register(Insurance)
 class Insurance_admin(admin.ModelAdmin):
-    list_display = ('name', 'customer', 'consultant', 'created_at', 'updated_at', 'duration', 'cost', 'payment_kind')
+    list_display = ('name', 'customer', 'consultant', 'created_at', 'duration', 'cost', 'payment_kind')
     search_fields = ('name', 'customer', 'consultant', 'payment_kind')
     ordering = ('created_at',)
 

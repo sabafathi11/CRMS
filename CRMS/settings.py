@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'insurance.apps.InsuranceConfig',
     'consultant.apps.ConsultantConfig',
     'customer.apps.CustomerConfig',
+    'bootstrap5',
 
 ]
 

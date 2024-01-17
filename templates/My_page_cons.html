@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>this is {{ user.username }} page</title>
+    <title></title>
 </head>
 <body>
-
+this is {{ user.username }} page
+{% for ins in user.consultant.all %}
+    <p>{{ ins.name_value }}</p>
+{% endfor %}
 </body>
 </html>
