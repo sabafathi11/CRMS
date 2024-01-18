@@ -12,3 +12,6 @@ class Customer(AbstractUser):
     natural_number = models.CharField(max_length=20, blank=False)
     kind = models.CharField(max_length=10, choices=(('1', 'customer'),('2', 'consultant')), default='1')
 
+    def __str__(self):
+        return self.first_name + ' ' + self.last_name
+

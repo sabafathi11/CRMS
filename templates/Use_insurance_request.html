@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post">
+    {% csrf_token %}
+    <label for="card_number">شماره کارت :</label>
+    <input type="text" id="card_number" name="card_number">
+    <br><br>
+    <label for="shaba_number">شماره شبا :</label>
+    <input type="text" id="shaba_number" name="shaba_number">
+    <br><br>
+    <label for="bank_name">نام بانک :</label>
+    <input type="text" id="bank_name" name="bank_name">
+    <br><br>
+    <label for="request_content">متن درخواست :</label>
+    <input type="text" id="request_content" name="request_content">
+    <br><br>
+    <label for="amount">مبلغ :</label>
+    <input type="text" id="amount" name="amount">
+    <br><br>
+    <label for="documents">فایل های مربوطه :</label>
+    <input type="file" id="documents" name="documents">
+    <br><br>
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>

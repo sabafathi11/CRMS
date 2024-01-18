@@ -6,8 +6,19 @@
 </head>
 <body>
 this is {{ user.username }} page
-{% for ins in user.consultant.all %}
+{% for ins in user.insurance_from_consultant.all %}
     <p>{{ ins.name_value }}</p>
+    {% for req in ins.use_insurance_from_insurance.all %}
+        {% if req.show_to_consultant  %}
+        <p>{{ req.request_content }}</p>
+        <br>
+        <a href="{% url 'consultant:answer_use_request_url' req.pk %}"> answer </a>
+        <br>
+        <a href="{% url 'consultant:turn_request_to_paid_url' req.pk %}"> paid </a>
+        <br>
+        <a href="{% url 'consultant:turn_request_to_not_show_url' req.pk %}"> not show </a>
+        {% endif %}
+    {% endfor %}
 {% endfor %}
 </body>
 </html>

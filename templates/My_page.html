@@ -7,9 +7,12 @@
 <body>
 this is {{ user.username }} page
 <br>
-{% for ins in user.Insurance.all %}
+{% for ins in user.insurance_from_customer.all %}
     <p>{{ ins.name_value }}</p>
-    {% for pay in ins.payment_dates.all %}
+    <a href="{% url 'insurance:use_request_url' ins.pk %}"> use_request </a>
+    <br>
+    payment dates
+    {% for pay in ins.payment_dates_from_insurance.all %}
         {% if not pay.paid %}
             <p> {{ pay.date }} </p>
             <a href="{% url 'insurance:pay_url' pay.date|slugify ins.pk %}"> pay </a>
