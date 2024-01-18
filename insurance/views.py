@@ -1,9 +1,8 @@
 import datetime
 from django.shortcuts import render, reverse
-from .forms import Insurance_form
-from .models import Insurance, Payment_dates, Customer
+from .forms import Insurance_form, Use_insurance_form
+from .models import Insurance, Payment_dates, Customer, Bank_card, Use_insurance
 from django.http import HttpResponseRedirect
-
 cost_per_year = {1: 300000,
                  2: 400000,
                  3: 500000,
@@ -48,13 +47,38 @@ def sign_up_insurance(request, pk):
         form = Insurance_form()
     return render(request, 'Sign_up_insurance.html', {'form': form})
 
-def pay(request,date,ins_pk):
+
+def pay(request, date, ins_pk):
     date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
-    payment1 = Payment_dates.objects.get(insurance_id=ins_pk,date=date)
+    payment1 = Payment_dates.objects.get(insurance_id=ins_pk, date=date)
     user_pk = Insurance.objects.get(pk=ins_pk).customer.pk
     payment1.paid = True
     payment1.save()
     return HttpResponseRedirect(reverse("customer:my_page_url", args=(user_pk,)))
 
-def use(request):
-    pass
+
+def use_request(request, ins_pk):
+    if request.method == 'POST':
+        card_number = request.POST['card_number']
+        shaba_number = request.POST['shaba_number']
+        bank_name = request.POST['bank_name']
+        owner_pk = Insurance.objects.get(pk=ins_pk).customer.pk
+        recieve_card = Bank_card.objects.create(card_number=card_number, shaba_number=shaba_number, bank_name=bank_name,
+                                                owner_id=owner_pk)
+        recieve_card.save()
+        recieve_card_pk = recieve_card.pk
+        request_content = request.POST['request_content']
+        request_date = datetime.date.today()
+        amount = request.POST['amount']
+        documents = request.POST['documents']
+        use_insurance1 = Use_insurance.objects.create(request_content=request_content, request_date=request_date,
+                                                      amount=amount,
+                                                      recieve_card_id=recieve_card_pk, documents=documents,
+                                                      insurance_id=ins_pk)
+        use_insurance1.save()
+        return HttpResponseRedirect(reverse('customer:my_page_url', args=(owner_pk,)))
+    else:
+        form = Use_insurance_form()
+        return render(request, 'Use_insurance_request.html', {'form': form})
+
+
