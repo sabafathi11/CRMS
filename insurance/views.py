@@ -29,20 +29,22 @@ def sign_up_insurance(request, pk):
         insurance1 = Insurance.objects.create(name=name, customer_id=pk, created_at=created_at, duration=duration,
                                               cost=cost_per_year[int(name)] * int(duration), payment_kind=payment_kind)
         insurance1.save()
-        j = 0
-        i = 0
-        while j < int(insurance1.payment_count):
-            if payment_kind == '1':
-                if i == 12:
-                    i = 1
-                payment_date1 = Payment_dates(date=created_at.replace(month=(created_at.month + i) % 12),
-                                              insurance=insurance1)
-            else:
-                payment_date1 = Payment_dates(date=created_at.replace(year=created_at.year + i), insurance=insurance1)
-            payment_date1.save()
-            j += 1
-            i += 1
-
+        if payment_kind == '2':
+            month = created_at.month
+            year = created_at.year
+            for i in range(int(insurance1.payment_count)):
+                payment_date1 = Payment_dates(date=created_at.replace(month=month, year=year), insurance=insurance1)
+                payment_date1.save()
+                month += 1
+                if month == 13 :
+                    month = 1
+                    year += 1
+        else:
+            year = created_at.year
+            for i in range(int(insurance1.payment_count)):
+                payment_date1 = Payment_dates(date=created_at.replace(year=year), insurance=insurance1)
+                payment_date1.save()
+                year += 1
         return HttpResponseRedirect(reverse("customer:my_page_url", args=(pk,)))
     else:
         form = Insurance_form()

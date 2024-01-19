@@ -12,9 +12,9 @@ class Insurance(models.Model):
     consultant = models.ForeignKey(Consultant, on_delete=models.SET_NULL, related_name='insurance_from_consultant', null=True)
     created_at = models.DateField()
     duration = models.IntegerField(
-        choices=((1, '1 year'), (5, '5 years'), (10, '10 years'), (15, '15 years'), (30, '30 years'),))
+        choices=((1, 'یک سال'), (5, '5 سال'), (10, '10 سال'), (15, '15 سال'), (30, '30 سال'),))
     cost = models.FloatField(max_length=150, blank=False)
-    payment_kind = models.CharField(max_length=15, choices=(('1', 'yearly'), ('2', 'monthly')))
+    payment_kind = models.CharField(max_length=15, choices=(('1', 'سالانه'), ('2', 'ماهانه')))
 
     @property
     def name_value(self):
