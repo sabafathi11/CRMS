@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fa">
+<head>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light menu_color" dir="rtl">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">CRMS</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{% url 'insurance:home_url' %}">خانه</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">بیمه ها</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">مشاوران</a>
+                </li>
+                {% if not user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'customer:login_url' %}">ورود</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'customer:logout_url' %}">خروج</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'customer:sign_up_url' %}">ایجاد حساب کاربری</a>
+                </li>
+                {% if user.is_authenticated %}
+                    {% if user.kind == '1' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'customer:my_page_url' user.pk %}">صفحه من</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'consultant:my_page_cons_url' user.pk %}">صفحه من</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+{% block content %}{% endblock %}
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div class="container">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <p class="col-md-4 mb-0 text-muted">&copy; صبا فتحی ، شقایق امینی </p>
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><a href="{% url 'insurance:home_url' %}" class="nav-link px-2 text-muted">خانه</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">بیمه ها</a></li>
+            {% if user.is_authenticated %}
+                <li class="nav-item"><a href="{% url 'insurance:sign_up_insurance_url' user.pk %}"
+                                        class="nav-link px-2 text-muted">خرید بیمه</a></li>
+            {% else %}
+                <li class="nav-item"><a href="{% url 'customer:login_url' %}" class="nav-link px-2 text-muted">خرید
+                    بیمه</a></li>
+            {% endif %}
+        </ul>
+    </footer>
+</div>
+</body>
+</html>

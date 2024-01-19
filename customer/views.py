@@ -28,10 +28,15 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        customer1 = Customer.objects.get(username=username, password=password)
+        try:
+            customer1 = Customer.objects.get(username=username, password=password)
+        except:
+            customer1 = None
         if customer1 is not None:
             login(request, customer1)
-            return HttpResponseRedirect(reverse("insurance:home_url"))
+            return HttpResponseRedirect(reverse("customer:my_page_url", args=(customer1.pk,)))
+        else:
+            return HttpResponseRedirect(reverse('customer:login_url'))
     return render(request, 'Login.html')
 
 

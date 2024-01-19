@@ -1,21 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'header_footer.html' %}
 
-<button><a href="{% url 'customer:login_url' %}">Login</a></button>
-<button><a href="{% url 'customer:sign_up_url' %}">Sign up</a></button>
-<button><a href="{% url 'customer:logout_url' %}">Logout</a></button>
-{% if user.is_authenticated %}
-    <p>you are logged in</p>
-    {% if user.kind == '1' %}
-        <button><a href="{% url 'customer:my_page_url' user.pk %}">My page</a></button>
-    {% else %}
-        <button><a href="{% url 'consultant:my_page_cons_url' user.pk %}">My page</a></button>
+{% block title %}
+    سامانه ارتباط با مشتری
+{% endblock %}
+
+
+    <button><a href="{% url 'customer:login_url' %}">Login</a></button>
+    <button><a href="{% url 'customer:sign_up_url' %}">Sign up</a></button>
+    <button><a href="{% url 'customer:logout_url' %}">Logout</a></button>
+    {% if user.is_authenticated %}
+        <p>you are logged in</p>
+        {% if user.kind == '1' %}
+            <button><a href="{% url 'customer:my_page_url' user.pk %}">My page</a></button>
+        {% else %}
+            <button><a href="{% url 'consultant:my_page_cons_url' user.pk %}">My page</a></button>
+        {% endif %}
     {% endif %}
-{% endif %}
-</body>
-</html>
