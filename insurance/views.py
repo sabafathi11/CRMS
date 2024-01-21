@@ -36,7 +36,7 @@ def sign_up_insurance(request, pk):
                 payment_date1 = Payment_dates(date=created_at.replace(month=month, year=year), insurance=insurance1)
                 payment_date1.save()
                 month += 1
-                if month == 13 :
+                if month == 13:
                     month = 1
                     year += 1
         else:
@@ -54,10 +54,10 @@ def sign_up_insurance(request, pk):
 def pay(request, date, ins_pk):
     date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
     payment1 = Payment_dates.objects.get(insurance_id=ins_pk, date=date)
-    user_pk = Insurance.objects.get(pk=ins_pk).customer.pk
     payment1.paid = True
+    payment1.paid_date = datetime.datetime.today()
     payment1.save()
-    return HttpResponseRedirect(reverse("customer:my_page_url", args=(user_pk,)))
+    return HttpResponseRedirect(reverse("insurance:payment_date_url", args=(ins_pk,)))
 
 
 def use_request(request, ins_pk):
@@ -75,9 +75,15 @@ def use_request(request, ins_pk):
         amount = request.POST['amount']
         documents = request.POST['documents']
         use_insurance1 = Use_insurance.objects.create(request_content=request_content, request_date=request_date,
-                                                      amount=amount,recieve_card_id=recieve_card_pk, documents=documents,
+                                                      amount=amount, recieve_card_id=recieve_card_pk,
+                                                      documents=documents,
                                                       insurance_id=ins_pk)
         use_insurance1.save()
         return HttpResponseRedirect(reverse('customer:my_page_url', args=(owner_pk,)))
     else:
         return render(request, 'Use_insurance_request.html')
+
+
+def payment_dates_view(request, ins_pk):
+    insurance1 = Insurance.objects.get(pk=ins_pk)
+    return render(request, 'Payment_dates.html', {'insurance': insurance1})

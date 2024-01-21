@@ -1,0 +1,95 @@
+{% extends 'header_footer.html' %}
+{% load jalali_tags %}
+
+{% block title %}
+    سامانه ارتباط با مشتری
+{% endblock %}
+{% block content %}
+    <main class="container" dir="rtl">
+        <div class="p-4 p-md-5 mb-4 rounded user_profile">
+            <div class="col-lg-6 px-0">
+                <h3>{{ insurance.name_value }}</h3>
+                <br>
+                <p>تاریخ خرید
+                    : {{ insurance.created_at|to_jalali:'%y/%m/%d' }}</p>
+                <p>مدت زمان : {{ insurance.duration }} سال</p>
+                <p>تاریخ انقضا : {{ insurance.expire_date|to_jalali:'%y/%m/%d' }}</p>
+                <p>مشاور : {{ insurance.consultant.get_full_name }}</p>
+                <p>هزینه سالانه : {{ insurance.cost_money }} تومان</p>
+                <p>نحوه پرداخت اقساط : {{ insurance.payment_kind_value }}</p>
+            </div>
+        </div>
+
+        <h3 class="p-3">تاریخ های پرداخت نشده :</h3>
+        <br>
+        {% if insurance.not_paid_dates %}
+            <div class="row mb-2">
+                {% for pay in insurance.payment_dates_from_insurance.all %}
+                    {% if not pay.paid %}
+                        <div class="col-md-12">
+                            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                                <div class="col p-4 d-flex flex-column position-static">
+                                    <br>
+                                    <div class="mb-1 text-body-secondary">تاریخ قسط
+                                        : {{ pay.date|to_jalali:'%y/%m/%d' }}</div>
+                                    <div class="mb-1 text-body-secondary">مبلغ : {{ insurance.payment_amount }} تومان
+                                    </div>
+                                    <a href="{% url 'insurance:pay_url' pay.date|slugify insurance.pk %}">
+                                        پرداخت
+                                    </a>
+                                    <br>
+                                </div>
+                                <div class="col-auto d-none d-lg-block">
+                                    <svg class="bd-placeholder-img" width="200" height="150"
+                                         xmlns="http://www.w3.org/2000/svg"
+                                         role="img" preserveAspectRatio="xMidYMid slice"
+                                         focusable="false"><title>Placeholder</title>
+                                        <rect width="100%" height="100%" fill="#00719c"></rect>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="p-3">تمامی اقساط این بیمه پرداخت شده</p>
+        {% endif %}
+
+
+        <h3 class="p-3">تاریخ های پرداخت شده :</h3>
+        <br>
+        {% if insurance.paid_dates %}
+            <div class="row mb-2">
+                {% for pay in insurance.payment_dates_from_insurance.all %}
+                    {% if pay.paid %}
+                        <div class="col-md-12">
+                            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                                <div class="col p-4 d-flex flex-column position-static">
+                                    <br>
+                                    <div class="mb-1 text-body-secondary">تاریخ
+                                        : {{ pay.date|to_jalali:'%y/%m/%d' }}</div>
+                                    <div class="mb-1 text-body-secondary">تاریخ پرداخت
+                                        : {{ pay.paid_date|to_jalali:'%y/%m/%d' }}</div>
+                                    <div class="mb-1 text-body-secondary">مبلغ : {{ insurance.payment_amount }} تومان
+                                    </div>
+                                    <br>
+                                </div>
+                                <div class="col-auto d-none d-lg-block">
+                                    <svg class="bd-placeholder-img" width="200" height="150"
+                                         xmlns="http://www.w3.org/2000/svg"
+                                         role="img" preserveAspectRatio="xMidYMid slice"
+                                         focusable="false"><title>Placeholder</title>
+                                        <rect width="100%" height="100%" fill="#00719c"></rect>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="p-3">شما هیچ پرداختی برای این بیمه نداشتید</p>
+        {% endif %}
+    </main>
+{% endblock %}

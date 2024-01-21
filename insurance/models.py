@@ -9,7 +9,8 @@ class Insurance(models.Model):
         (7, 'مرکز صنعتی'), (8, 'مرکز غیر صنعتی'), (9, 'حمل و نقل'), (10, 'هواپیما'))
     name = models.IntegerField(blank=False, choices=(Choices))
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, related_name='insurance_from_customer', null=True)
-    consultant = models.ForeignKey(Consultant, on_delete=models.SET_NULL, related_name='insurance_from_consultant', null=True)
+    consultant = models.ForeignKey(Consultant, on_delete=models.SET_NULL, related_name='insurance_from_consultant',
+                                   null=True)
     created_at = models.DateField()
     duration = models.IntegerField(
         choices=((1, 'یک سال'), (5, '5 سال'), (10, '10 سال'), (15, '15 سال'), (30, '30 سال'),))
@@ -23,6 +24,16 @@ class Insurance(models.Model):
                 return j
 
     @property
+    def payment_kind_value(self):
+        if self.payment_kind == '1':
+            return 'سالانه'
+        return 'ماهانه'
+
+    @property
+    def expire_date(self):
+        return self.created_at.replace(year=self.created_at.year + self.duration)
+
+    @property
     def payment_count(self):
         if self.payment_kind == '1':
             return int(self.duration)
@@ -30,17 +41,37 @@ class Insurance(models.Model):
             return int(self.duration) * 12
 
     @property
+    def cost_money(self):
+        num = int(self.cost)
+        return str('{:,}'.format(num))
+
+    @property
     def payment_amount(self):
-        return self.cost / self.payment_count
+        num = int(self.cost / self.payment_count)
+        return str('{:,}'.format(num))
+
+    @property
+    def not_paid_dates(self):
+        for i in self.payment_dates_from_insurance.all():
+            if not i.paid:
+                return True
+
+    @property
+    def paid_dates(self):
+        for i in self.payment_dates_from_insurance.all():
+            if i.paid:
+                return True
 
     def __str__(self):
-        return self.name_value  + ' ' + self.customer.username
+        return self.name_value + ' ' + self.customer.username
 
 
 class Payment_dates(models.Model):
     date = models.DateField()
+    paid_date = models.DateField(null=True,blank=True)
     paid = models.BooleanField(default=False)
-    insurance = models.ForeignKey(Insurance, on_delete=models.SET_NULL, related_name='payment_dates_from_insurance', null=True)
+    insurance = models.ForeignKey(Insurance, on_delete=models.SET_NULL, related_name='payment_dates_from_insurance',
+                                  null=True)
 
     def pay(self):
         self.paid = True
@@ -64,9 +95,11 @@ class Use_insurance(models.Model):
     request_answer = models.CharField(max_length=500, default='')
     request_date = models.DateField()
     amount = models.FloatField(max_length=150, default=0)
-    recieve_card = models.ForeignKey(Bank_card, on_delete=models.SET_NULL, related_name='use_insurance_from_card', null=True)
+    recieve_card = models.ForeignKey(Bank_card, on_delete=models.SET_NULL, related_name='use_insurance_from_card',
+                                     null=True)
     documents = models.FileField(default='')
-    insurance = models.ForeignKey(Insurance, on_delete=models.CASCADE, related_name='use_insurance_from_insurance', null=True)
+    insurance = models.ForeignKey(Insurance, on_delete=models.CASCADE, related_name='use_insurance_from_insurance',
+                                  null=True)
     paid = models.BooleanField(default=False)
     paid_date = models.DateField(null=True)
     show_to_consultant = models.BooleanField(default=True)
