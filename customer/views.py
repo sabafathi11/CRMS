@@ -34,7 +34,10 @@ def login_view(request):
             customer1 = None
         if customer1 is not None:
             login(request, customer1)
-            return HttpResponseRedirect(reverse("customer:my_page_url", args=(customer1.pk,)))
+            if customer1.kind == '1' :
+                return HttpResponseRedirect(reverse("customer:my_page_url", args=(customer1.pk,)))
+            else:
+                return HttpResponseRedirect(reverse("consultant:my_page_cons_url", args=(customer1.pk,)))
         else:
             return HttpResponseRedirect(reverse('customer:login_url'))
     return render(request, 'Login.html')
@@ -48,3 +51,5 @@ def logout_view(request):
 def my_page(request, pk):
     user = get_object_or_404(Customer, pk=pk)
     return render(request, 'My_page.html', {'user': user})
+
+

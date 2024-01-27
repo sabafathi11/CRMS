@@ -1,24 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-this is {{ user.username }} page
-{% for ins in user.insurance_from_consultant.all %}
-    <p>{{ ins.name_value }}</p>
-    {% for req in ins.use_insurance_from_insurance.all %}
-        {% if req.show_to_consultant  %}
-        <p>{{ req.request_content }}</p>
-        <br>
-        <a href="{% url 'consultant:answer_use_request_url' req.pk %}"> answer </a>
-        <br>
-        <a href="{% url 'consultant:turn_request_to_paid_url' req.pk %}"> paid </a>
-        <br>
-        <a href="{% url 'consultant:turn_request_to_not_show_url' req.pk %}"> not show </a>
-        {% endif %}
-    {% endfor %}
-{% endfor %}
-</body>
-</html>
+{% extends 'header_footer.html' %}
+{% load jalali_tags %}
+
+{% block title %}
+    صفحه من
+{% endblock %}
+{% block content %}
+    <main class="container" dir="rtl">
+        <div class="p-4 p-md-5 mb-4 rounded user_profile">
+            <div class="col-lg-6 px-0">
+                <h3>{{ user.get_full_name }}</h3>
+                <br>
+                <p>نام کاربری : {{ user.username }}</p>
+                <p>شماره تماس : {{ user.phone_number }}</p>
+                <p>آدرس : {{ user.address }}</p>
+            </div>
+        </div>
+        <h3 class="p-3">درخواست های پرداخت مشتریان :</h3>
+        <div class="row mb-2">
+            {% for ins in user.insurance_from_consultant.all %}
+                {% for request in ins.use_insurance_from_insurance.all %}
+                    {% if request.show_to_consultant %}
+                        <div class="col-12">
+                        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <div class="col p-4 d-flex flex-column position-static">
+                                <h5 class="mb-0">درخواست {{ ins.customer.get_full_name }} برای
+                                    بیمه {{ ins.name_value }}</h5>
+                                <br>
+                                <div class="mb-1 text-body-secondary">
+                                    متن درخواست : {{ request.request_content }}
+                                </div>
+                                <div class="mb-1 text-body-secondary">
+                                    تاریخ درخواست : {{ request.request_date|to_jalali:'%y/%m/%d' }}
+                                </div>
+                                <div class="mb-1 text-body-secondary">
+                                    کارت بانک انتخابی برای دریافت پول : بانک {{ request.recieve_card.bank_name }} شماره
+                                    کارت {{ request.recieve_card.card_number }} شماره
+                                    شبا {{ request.recieve_card.shaba_number }}
+                                </div>
+                            </div>
+                            <div class="p-3 text-left">
+                                <button onclick="$('#condition').toggle();" class="btn btn-primary btn-sm">پاسخ به
+                                    درخواست
+                                </button>
+                            </div>
+                            <div class="p-3 text-left">
+                                <a href="{% url 'consultant:turn_request_to_not_show_url' request.pk %}"
+                                   class="btn btn-primary btn-sm">عدم نمایش این درخواست</a>
+                            </div>
+                            <div id="condition" style="display: none">
+                                <div class="col p-4 d-flex flex-column position-static">
+                                    <div class="mb-1 text-body-secondary">
+                                        <form method="POST">
+                                            {% csrf_token %}
+                                            <div class="mb-3 mt-3">
+                                                <label for="request_answer" class="form-label">متن پاسخ :</label>
+                                                <textarea class="form-control " id="request_answer"
+                                                          name="request_answer"
+                                                          rows="10"></textarea>
+                                            </div>
+                                            <div class="mb-3 mt-3">
+                                                <label for="paid" class="form-label">پرداخت شد.</label>
+                                                <input type="checkbox" id="paid" name="paid">
+                                            </div>
+                                            <div class="mb-3 mt-3" style="display: none">
+                                                <label for="request_pk">نام کاربری :</label>
+                                                <input type="text" class="form-control" id="request_pk"
+                                                       name="request_pk"
+                                                       value="{{ request.pk }}">
+                                            </div>
+                                            <div class="text-center">
+                                                <button type="submit" class="btn btn-primary btn_width" value="Submit">
+                                                    ثبت
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            </div>
+            <br>
+        </div>
+    </main>
+{% endblock %}

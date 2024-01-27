@@ -59,3 +59,7 @@
 .user_profile{
 	background-color: #e1f1fd;
 }
+
+.text-left{
+	text-align: left; !important;
+}

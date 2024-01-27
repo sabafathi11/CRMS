@@ -92,7 +92,7 @@ class Bank_card(models.Model):
 
 class Use_insurance(models.Model):
     request_content = models.CharField(max_length=500, default='')
-    request_answer = models.CharField(max_length=500, default='')
+    request_answer = models.CharField(max_length=500, default='', blank=True)
     request_date = models.DateField()
     amount = models.FloatField(max_length=150, default=0)
     recieve_card = models.ForeignKey(Bank_card, on_delete=models.SET_NULL, related_name='use_insurance_from_card',
@@ -101,7 +101,7 @@ class Use_insurance(models.Model):
     insurance = models.ForeignKey(Insurance, on_delete=models.CASCADE, related_name='use_insurance_from_insurance',
                                   null=True)
     paid = models.BooleanField(default=False)
-    paid_date = models.DateField(null=True)
+    paid_date = models.DateField(null=True, blank=True)
     show_to_consultant = models.BooleanField(default=True)
 
     def __str__(self):

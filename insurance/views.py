@@ -46,9 +46,7 @@ def sign_up_insurance(request, pk):
                 payment_date1.save()
                 year += 1
         return HttpResponseRedirect(reverse("customer:my_page_url", args=(pk,)))
-    else:
-        form = Insurance_form()
-    return render(request, 'Sign_up_insurance.html', {'form': form})
+    return render(request, 'Sign_up_insurance.html')
 
 
 def pay(request, date, ins_pk):

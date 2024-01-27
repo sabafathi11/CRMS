@@ -14,7 +14,11 @@
                     : {{ insurance.created_at|to_jalali:'%y/%m/%d' }}</p>
                 <p>مدت زمان : {{ insurance.duration }} سال</p>
                 <p>تاریخ انقضا : {{ insurance.expire_date|to_jalali:'%y/%m/%d' }}</p>
-                <p>مشاور : {{ insurance.consultant.get_full_name }}</p>
+                {% if insurance.consultant %}
+                    <p>مشاور : {{ insurance.consultant.get_full_name }}</p>
+                {% else %}
+                    <p>مشاور : بزودی توسط مدیریت شرکت تعیین میشود!</p>
+                {% endif %}
                 <p>هزینه سالانه : {{ insurance.cost_money }} تومان</p>
                 <p>نحوه پرداخت اقساط : {{ insurance.payment_kind_value }}</p>
             </div>

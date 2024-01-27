@@ -28,7 +28,11 @@
                             <br>
                             <div class="mb-1 text-body-secondary">تاریخ خرید
                                 : {{ ins.created_at|to_jalali:'%y/%m/%d' }}</div>
-                            <div class="mb-1 text-body-secondary">مشاور : {{ ins.consultant.get_full_name }}</div>
+                            {% if ins.consultant %}
+                                <div class="mb-1 text-body-secondary">مشاور : {{ ins.consultant.get_full_name }}</div>
+                            {% else %}
+                                <div class="mb-1 text-body-secondary">مشاور : بزودی توسط مدیریت شرکت تعیین میشود!</div>
+                            {% endif %}
                             <div class="mb-1 text-body-secondary">مدت زمان : {{ ins.duration }} سال</div>
                             <div class="mb-1 text-body-secondary">انقضا
                                 : {{ ins.expire_date|to_jalali:'%y/%m/%d' }}</div>
@@ -53,6 +57,56 @@
                 </div>
             {% endfor %}
         </div>
-    <a href="{% url 'insurance:sign_up_insurance_url' user.pk %}" class="btn btn-primary btn-lg">خرید بیمه جدید</a>
+        <a href="{% url 'insurance:sign_up_insurance_url' user.pk %}" class="btn btn-primary btn-lg">خرید بیمه جدید</a>
+        <br><br>
+        <h3 class="p-3">درخواست های پرداخت :</h3>
+        <div class="row mb-2">
+            {% for ins in user.insurance_from_customer.all %}
+                {% for request in ins.use_insurance_from_insurance.all %}
+                    <div class="col-12">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <h5 class="mb-0">درخواست برای {{ ins.name_value }}</h5>
+                            <br>
+                            <div class="mb-1 text-body-secondary">
+                                متن درخواست : {{ request.request_content }}
+                            </div>
+                            <div class="mb-1 text-body-secondary">
+                                تاریخ درخواست : {{ request.request_date|to_jalali:'%y/%m/%d' }}
+                            </div>
+                            <div class="mb-1 text-body-secondary">
+                                کارت بانک انتخابی برای دریافت پول : بانک {{ request.recieve_card.bank_name }} شماره
+                                کارت {{ request.recieve_card.card_number }}
+                            </div>
+                        </div>
+                        <div class="p-3 text-left">
+                            <button onclick="$('#condition').toggle();" class="btn btn-primary btn-sm">وضعیت درخواست
+                            </button>
+                        </div>
+                        <div id="condition" style="display: none">
+                            <div class="col p-4 d-flex flex-column position-static">
+                                <div class="mb-1 text-body-secondary">
+                                    {% if request.request_answer %}
+                                        پاسخ مشاور : {{ request.request_answer }}
+                                    {% else %}
+                                        پاسخ مشاور : درخواست شما هنوز توسط مشاور بیمه شما بررسی نشده.
+                                    {% endif %}
+                                </div>
+                                <div class="mb-1 text-body-secondary">
+                                    {% if request.paid %}
+                                        وضعیت پرداخت : مبلغ درخواستی شما در تاریخ {{ request.paid_date|to_jalali:'%y/%m/%d' }} پرداخت شده است.
+                                    {% else %}
+                                        وضعیت پرداخت : پرداخت نشده.
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            </div>
+
+            <br>
+
     </main>
 {% endblock %}
