@@ -4,23 +4,13 @@ from .forms import Insurance_form
 from .models import Insurance, Payment_dates, Customer, Bank_card, Use_insurance
 from django.http import HttpResponseRedirect
 
-cost_per_year = {1: 300000,
-                 2: 400000,
-                 3: 500000,
-                 4: 300000,
-                 5: 200000,
-                 6: 250000,
-                 7: 600000,
-                 8: 600000,
-                 9: 500000,
-                 10: 80000}
-
 
 def home_view(request):
     return render(request, 'Home.html')
 
 
 def sign_up_insurance(request, pk):
+    cost_per_year = Insurance.cost_per_year
     if request.method == 'POST':
         name = request.POST['name']
         created_at = datetime.date.today()
@@ -85,3 +75,7 @@ def use_request(request, ins_pk):
 def payment_dates_view(request, ins_pk):
     insurance1 = Insurance.objects.get(pk=ins_pk)
     return render(request, 'Payment_dates.html', {'insurance': insurance1})
+
+
+def insurances(request):
+    return render(request, 'insurances.html')

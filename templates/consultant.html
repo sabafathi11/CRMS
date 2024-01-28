@@ -1,0 +1,18 @@
+{% extends 'header_footer.html' %}
+{% load jalali_tags %}
+
+{% block title %}
+    صفحه مشاور
+{% endblock %}
+{% block content %}
+    <main class="container" dir="rtl">
+        <div class="p-4 p-md-5 mb-4 rounded user_profile">
+            <div class="col-lg-6 px-0">
+                <h3>{{ consultant.get_full_name }}</h3>
+                <br>
+                <p>نام کاربری : {{ consultant.username }}</p>
+                <p>شماره تماس : {{ consultant.phone_number }}</p>
+            </div>
+        </div>
+    </main>
+{% endblock %}

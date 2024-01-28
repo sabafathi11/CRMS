@@ -2,7 +2,7 @@
 {% load jalali_tags %}
 
 {% block title %}
-    تاریخ های پرداخت
+        تاریخ های پرداخت
 {% endblock %}
 {% block content %}
     <main class="container" dir="rtl">
@@ -14,11 +14,6 @@
                     : {{ insurance.created_at|to_jalali:'%y/%m/%d' }}</p>
                 <p>مدت زمان : {{ insurance.duration }} سال</p>
                 <p>تاریخ انقضا : {{ insurance.expire_date|to_jalali:'%y/%m/%d' }}</p>
-                {% if insurance.consultant %}
-                    <p>مشاور : {{ insurance.consultant.get_full_name }}</p>
-                {% else %}
-                    <p>مشاور : بزودی توسط مدیریت شرکت تعیین میشود!</p>
-                {% endif %}
                 <p>هزینه کل : {{ insurance.cost_money }} تومان</p>
                 <p>نحوه پرداخت اقساط : {{ insurance.payment_kind_value }}</p>
             </div>
@@ -38,10 +33,6 @@
                                         : {{ pay.date|to_jalali:'%y/%m/%d' }}</div>
                                     <div class="mb-1 text-body-secondary">مبلغ : {{ insurance.payment_amount }} تومان
                                     </div>
-                                    <a href="{% url 'insurance:pay_url' pay.date|slugify insurance.pk %}">
-                                        پرداخت
-                                    </a>
-                                    <br>
                                 </div>
                                 <div class="col-auto d-none d-lg-block">
                                     <svg class="bd-placeholder-img" width="200" height="150"
@@ -93,7 +84,7 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p class="p-3">شما هیچ پرداختی برای این بیمه نداشتید</p>
+            <p class="p-3">مشتری هیچ مبلغی برای این بیمه پرداخت نکرده</p>
         {% endif %}
     </main>
 {% endblock %}

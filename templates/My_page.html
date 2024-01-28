@@ -16,6 +16,37 @@
             </div>
         </div>
 
+        <h3 class="p-3">قسط های عقب افتاده :</h3>
+
+        <div class="row mb-2">
+            <div class="col-12">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        {% if delayed_dates %}
+                            {% for payment_date in delayed_dates %}
+                                پرداخت در تاریخ {{ payment_date.date|to_jalali:'%y/%m/%d' }} برای بیمه
+                                {{ payment_date.insurance.name_value }}
+                            {% endfor %}
+                        {% else %}
+                            شما هیچ پرداخت عقب افتاده ای ندارید
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="p-3">قسط بعدی شما :</h3>
+
+        <div class="row mb-2">
+            <div class="col-12">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        قسط بعدی شما در تاریخ {{ closest_payment.date|to_jalali:'%y/%m/%d' }} برای
+                        بیمه {{ closest_payment.insurance.name_value }} است.
+                    </div>
+                </div>
+            </div>
+        </div>
         <h3 class="p-3">بیمه ها :</h3>
         <br>
 
@@ -29,14 +60,14 @@
                             <div class="mb-1 text-body-secondary">تاریخ خرید
                                 : {{ ins.created_at|to_jalali:'%y/%m/%d' }}</div>
                             {% if ins.consultant %}
-                                <div class="mb-1 text-body-secondary">مشاور : {{ ins.consultant.get_full_name }}</div>
+                                <div class="mb-1 text-body-secondary">مشاور : <a href="{% url 'consultant:consultant_url' ins.consultant.pk %}">{{ ins.consultant.get_full_name }}</a></div>
                             {% else %}
                                 <div class="mb-1 text-body-secondary">مشاور : بزودی توسط مدیریت شرکت تعیین میشود!</div>
                             {% endif %}
                             <div class="mb-1 text-body-secondary">مدت زمان : {{ ins.duration }} سال</div>
                             <div class="mb-1 text-body-secondary">انقضا
                                 : {{ ins.expire_date|to_jalali:'%y/%m/%d' }}</div>
-                            <div class="mb-1 text-body-secondary">هزینه سالانه : {{ ins.cost_money }} تومان</div>
+                            <div class="mb-1 text-body-secondary">هزینه کل : {{ ins.cost_money }} تومان</div>
                             <div class="mb-1 text-body-secondary">نحوه پرداخت اقساط : {{ ins.payment_kind_value }}</div>
                             <br>
                             <a href="{% url 'insurance:payment_date_url' ins.pk %}">
@@ -94,7 +125,8 @@
                                 </div>
                                 <div class="mb-1 text-body-secondary">
                                     {% if request.paid %}
-                                        وضعیت پرداخت : مبلغ درخواستی شما در تاریخ {{ request.paid_date|to_jalali:'%y/%m/%d' }} پرداخت شده است.
+                                        وضعیت پرداخت : مبلغ درخواستی شما در تاریخ
+                                        {{ request.paid_date|to_jalali:'%y/%m/%d' }} پرداخت شده است.
                                     {% else %}
                                         وضعیت پرداخت : پرداخت نشده.
                                     {% endif %}

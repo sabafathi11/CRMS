@@ -3,16 +3,18 @@
 {% block title %}
     سامانه ارتباط با مشتری
 {% endblock %}
-
-
-    <button><a href="{% url 'customer:login_url' %}">Login</a></button>
-    <button><a href="{% url 'customer:sign_up_url' %}">Sign up</a></button>
-    <button><a href="{% url 'customer:logout_url' %}">Logout</a></button>
-    {% if user.is_authenticated %}
-        <p>you are logged in</p>
-        {% if user.kind == '1' %}
-            <button><a href="{% url 'customer:my_page_url' user.pk %}">My page</a></button>
-        {% else %}
-            <button><a href="{% url 'consultant:my_page_cons_url' user.pk %}">My page</a></button>
-        {% endif %}
-    {% endif %}
+{% block content %}
+    <main class="container" dir="rtl">
+        <br>
+        <div class="row mb-2">
+            <div class="col-12">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <div class="mb-1 text-body-secondary">
+                            سامانه ارتباط با مشتری در بیمه
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

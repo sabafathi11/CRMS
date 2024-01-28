@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth import login, logout
 from django.shortcuts import render, get_object_or_404, reverse
 from .models import Customer
@@ -34,7 +35,7 @@ def login_view(request):
             customer1 = None
         if customer1 is not None:
             login(request, customer1)
-            if customer1.kind == '1' :
+            if customer1.kind == '1':
                 return HttpResponseRedirect(reverse("customer:my_page_url", args=(customer1.pk,)))
             else:
                 return HttpResponseRedirect(reverse("consultant:my_page_cons_url", args=(customer1.pk,)))
@@ -50,6 +51,22 @@ def logout_view(request):
 
 def my_page(request, pk):
     user = get_object_or_404(Customer, pk=pk)
-    return render(request, 'My_page.html', {'user': user})
+    insurances = user.insurance_from_customer.all()
+    payment_dates = []
+    delayed_dates = []
+    for ins in insurances:
+        for payment_date in ins.payment_dates_from_insurance.all():
+            if not payment_date.paid:
+                if payment_date.date > datetime.date.today():
+                    payment_dates.append([payment_date, payment_date.date])
+                if payment_date.date < datetime.date.today():
+                    delayed_dates.append(payment_date)
+    payment_dates.sort(key=lambda l: l[1])
+    closest_payment = payment_dates[0][0]
+    return render(request, 'My_page.html',
+                  {'user': user, 'closest_payment': closest_payment, 'delayed_dates': delayed_dates})
 
 
+def customer_view(request, pk):
+    customer1 = Customer.objects.get(pk=pk)
+    return render(request, 'customer.html', {'customer': customer1})
