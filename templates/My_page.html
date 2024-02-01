@@ -40,10 +40,16 @@
         <div class="row mb-2">
             <div class="col-12">
                 <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                    <div class="col p-4 d-flex flex-column position-static">
-                        قسط بعدی شما در تاریخ {{ closest_payment.date|to_jalali:'%y/%m/%d' }} برای
-                        بیمه {{ closest_payment.insurance.name_value }} است.
-                    </div>
+                    {% if closest_payment %}
+                        <div class="col p-4 d-flex flex-column position-static">
+                            قسط بعدی شما در تاریخ {{ closest_payment.date|to_jalali:'%y/%m/%d' }} برای
+                            بیمه {{ closest_payment.insurance.name_value }} است.
+                        </div>
+                    {% else %}
+                        <div class="col p-4 d-flex flex-column position-static">
+                            شما هیچ پرداخت بعدی ای ندارید
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -60,7 +66,9 @@
                             <div class="mb-1 text-body-secondary">تاریخ خرید
                                 : {{ ins.created_at|to_jalali:'%y/%m/%d' }}</div>
                             {% if ins.consultant %}
-                                <div class="mb-1 text-body-secondary">مشاور : <a href="{% url 'consultant:consultant_url' ins.consultant.pk %}">{{ ins.consultant.get_full_name }}</a></div>
+                                <div class="mb-1 text-body-secondary">مشاور : <a
+                                        href="{% url 'consultant:consultant_url' ins.consultant.pk %}">{{ ins.consultant.get_full_name }}</a>
+                                </div>
                             {% else %}
                                 <div class="mb-1 text-body-secondary">مشاور : بزودی توسط مدیریت شرکت تعیین میشود!</div>
                             {% endif %}

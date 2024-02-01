@@ -62,7 +62,10 @@ def my_page(request, pk):
                 if payment_date.date < datetime.date.today():
                     delayed_dates.append(payment_date)
     payment_dates.sort(key=lambda l: l[1])
-    closest_payment = payment_dates[0][0]
+    try:
+        closest_payment = payment_dates[0][0]
+    except:
+        closest_payment = ''
     return render(request, 'My_page.html',
                   {'user': user, 'closest_payment': closest_payment, 'delayed_dates': delayed_dates})
 
