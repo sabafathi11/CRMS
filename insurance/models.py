@@ -20,7 +20,7 @@ class Insurance(models.Model):
     name = models.IntegerField(blank=False, choices=(Choices))
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, related_name='insurance_from_customer', null=True)
     consultant = models.ForeignKey(Consultant, on_delete=models.SET_NULL, related_name='insurance_from_consultant',
-                                   null=True)
+                                   null=True, blank=True)
     created_at = models.DateField()
     duration = models.IntegerField(
         choices=((1, 'یک سال'), (5, '5 سال'), (10, '10 سال'), (15, '15 سال'), (30, '30 سال'),))

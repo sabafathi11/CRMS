@@ -57,7 +57,7 @@ def my_page(request, pk):
     for ins in insurances:
         for payment_date in ins.payment_dates_from_insurance.all():
             if not payment_date.paid:
-                if payment_date.date > datetime.date.today():
+                if payment_date.date >= datetime.date.today():
                     payment_dates.append([payment_date, payment_date.date])
                 if payment_date.date < datetime.date.today():
                     delayed_dates.append(payment_date)

@@ -13,6 +13,7 @@ class Insurance_admin(admin.ModelAdmin):
 class Payment_dates_admin(admin.ModelAdmin):
     list_display = ('insurance', 'date', 'paid')
     search_fields = ('insurance', 'date', 'paid')
+    list_filter = ('insurance', )
     ordering = ('date',)
 
 
