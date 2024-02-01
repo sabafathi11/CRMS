@@ -63,7 +63,7 @@
         <p class="col-md-4 mb-0 text-muted">&copy; صبا فتحی ، شقایق امینی </p>
         <ul class="nav col-md-4 justify-content-end">
             <li class="nav-item"><a href="{% url 'insurance:home_url' %}" class="nav-link px-2 text-muted">خانه</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">بیمه ها</a></li>
+            <li class="nav-item"><a href="{% url 'insurance:insurances_url' %}" class="nav-link px-2 text-muted">بیمه ها</a></li>
             {% if user.is_authenticated %}
                 <li class="nav-item"><a href="{% url 'insurance:sign_up_insurance_url' user.pk %}"
                                         class="nav-link px-2 text-muted">خرید بیمه</a></li>
