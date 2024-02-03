@@ -1,6 +1,5 @@
 import datetime
 from django.shortcuts import render, reverse
-from .forms import Insurance_form
 from .models import Insurance, Payment_dates, Customer, Bank_card, Use_insurance
 from django.http import HttpResponseRedirect
 

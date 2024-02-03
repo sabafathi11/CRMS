@@ -2,7 +2,6 @@ import datetime
 from django.contrib.auth import login, logout
 from django.shortcuts import render, get_object_or_404, reverse
 from .models import Customer
-from .forms import Customer_form
 from django.http import HttpResponseRedirect
 
 
@@ -20,9 +19,7 @@ def signup_view(request):
                                             natural_number=natural_number)
         customer1.save()
         return HttpResponseRedirect(reverse("customer:login_url"))
-    else:
-        form = Customer_form()
-    return render(request, 'Sign_up.html', {'form': form})
+    return render(request, 'Sign_up.html')
 
 
 def login_view(request):
